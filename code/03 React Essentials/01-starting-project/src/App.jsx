@@ -4,11 +4,11 @@ import TabButton from "./components/TabButton.jsx";
 import TabContent from "./components/TabContent.jsx";
 
 import { CORE_CONCEPTS } from "./data.js";
-import { EXAMPLES } from "./data.js";
+
 import { useState } from "react";
 
 function App() {
-  const [selectedTopic, setSelectedTopic] = useState('components');
+  const [selectedTopic, setSelectedTopic] = useState();
 
   function handleSelect(selectedButton) {
     setSelectedTopic(selectedButton);
@@ -40,7 +40,7 @@ function App() {
             <TabButton onSelect={() => handleSelect('state')}>State</TabButton>
           </menu>
           {/*to dynamicaly access a property in the EXAMPLES object use square brackets */}
-          <TabContent topic={EXAMPLES[selectedTopic]}></TabContent>
+          <TabContent topic={selectedTopic}></TabContent>
         </section>
       </main>
     </div>
