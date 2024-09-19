@@ -5,10 +5,10 @@
 //     children: "Click Me!", // The content inside the component (passed implicitly)
 //     onSelect: handleSelect // The function passed to the onSelect prop
 // };
-export default function TabButton({children, onSelect}) {
+export default function TabButton({children, onSelect, isActive}) {
   return (
     <li>
-      <button onClick={onSelect}>{children}</button>
+      <button className={isActive ? 'active' : undefined} onClick={onSelect}>{children}</button>
     </li>
   );
 }
