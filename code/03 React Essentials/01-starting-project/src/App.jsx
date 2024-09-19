@@ -1,8 +1,19 @@
 import Header from "./components/Header/Header.jsx";
 import CoreConcepts from "./components/CoreConcepts.jsx";
+import TabButton from "./components/TabButton.jsx";
+import TabContent from "./components/TabContent.jsx";
+
 import { CORE_CONCEPTS } from "./data.js";
+import { EXAMPLES } from "./data.js";
+import { useState } from "react";
 
 function App() {
+  const [selectedTopic, setSelectedTopic] = useState('components');
+
+  function handleSelect(selectedButton) {
+    setSelectedTopic(selectedButton);
+  }
+
   return (
     <div>
       <Header />
@@ -23,8 +34,13 @@ function App() {
         <section id="examples">
           <h2>Examples</h2>
           <menu>
-            
+            <TabButton onSelect={() => handleSelect('components')}>Components</TabButton>
+            <TabButton onSelect={() => handleSelect('jsx')}>JSX</TabButton>
+            <TabButton onSelect={() => handleSelect('props')}>Props</TabButton>
+            <TabButton onSelect={() => handleSelect('state')}>State</TabButton>
           </menu>
+          {/*to dynamicaly access a property in the EXAMPLES object use square brackets */}
+          <TabContent topic={EXAMPLES[selectedTopic]}></TabContent>
         </section>
       </main>
     </div>
