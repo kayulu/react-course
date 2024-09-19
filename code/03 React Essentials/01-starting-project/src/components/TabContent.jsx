@@ -1,14 +1,17 @@
 import { EXAMPLES } from "../data.js";
 
 export default function TabContent({ topic }) {
-  return !topic ? (
+  // const currentTopic = topic == undefined ? null : topic.toLowerCase();
+  const currentTopic = topic?.toLowerCase() || null;
+
+  return !currentTopic || !EXAMPLES[currentTopic] ? (
     <h2>Select a topic</h2>
   ) : (
     <div id="tab-content">
-      <h2>{EXAMPLES[topic].title}</h2>
-      <p>{EXAMPLES[topic].description}</p>
+      <h2>{EXAMPLES[currentTopic].title}</h2>
+      <p>{EXAMPLES[currentTopic].description}</p>
       <pre>
-        <code>{EXAMPLES[topic].code}</code>
+        <code>{EXAMPLES[currentTopic].code}</code>
       </pre>
     </div>
   );

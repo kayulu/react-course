@@ -10,8 +10,26 @@ import { useState } from "react";
 function App() {
   const [selectedTopic, setSelectedTopic] = useState();
 
-  function handleSelect(selectedButton, clickedButtonName) {
+  const coreConcepts = [];
+  const topics = ["Components", "JSX", "Props", "State"];
+  const tabButtons = [];
+
+  function handleSelect(selectedButton) {
     setSelectedTopic(selectedButton);
+    console.log(selectedTopic);
+  }
+
+  // could also be done using 'map'
+  for (const item of topics) {
+    tabButtons.push(
+      <TabButton
+        key={item}
+        onSelect={() => handleSelect(item)}
+        isActive={selectedTopic === item}
+      >
+        {item}
+      </TabButton>
+    );
   }
 
   return (
@@ -21,45 +39,14 @@ function App() {
         <section id="core-concepts">
           <h2>Core Concepts</h2>
           <ul>
-            <CoreConcepts
-              title={CORE_CONCEPTS[0].title}
-              description={CORE_CONCEPTS[0].description}
-              image={CORE_CONCEPTS[0].image}
-            />
-            <CoreConcepts {...CORE_CONCEPTS[1]} />
-            <CoreConcepts {...CORE_CONCEPTS[2]} />
-            <CoreConcepts {...CORE_CONCEPTS[3]} />
+            {CORE_CONCEPTS.map((item) => (
+              <CoreConcepts key={item.title} {...item} />
+            ))}
           </ul>
         </section>
         <section id="examples">
           <h2>Examples</h2>
-          <menu>
-            <TabButton
-              onSelect={() => handleSelect("components")}
-              isActive={selectedTopic === "components"}
-            >
-              Components
-            </TabButton>
-            <TabButton
-              onSelect={() => handleSelect("jsx")}
-              isActive={selectedTopic === "jsx"}
-            >
-              JSX
-            </TabButton>
-            <TabButton
-              onSelect={() => handleSelect("props")}
-              isActive={selectedTopic === "props"}
-            >
-              Props
-            </TabButton>
-            <TabButton
-              onSelect={() => handleSelect("state")}
-              isActive={selectedTopic === "state"}
-            >
-              State
-            </TabButton>
-          </menu>
-          {/*to dynamicaly access a property in the EXAMPLES object use square brackets */}
+          <menu>{tabButtons}</menu>
           <TabContent topic={selectedTopic}></TabContent>
         </section>
       </main>
