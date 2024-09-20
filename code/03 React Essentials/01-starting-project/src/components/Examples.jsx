@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Section from "./Section";
 import TabContent from "./TabContent";
 import TabButton from "./TabButton";
 
@@ -19,7 +20,7 @@ export default function Examples() {
     tabButtons.push(
       <TabButton
         key={item}
-        onSelect={() => handleSelect(item)}
+        onClick={() => handleSelect(item)}
         isActive={selectedTopic === item}
       >
         {item}
@@ -28,10 +29,9 @@ export default function Examples() {
   }
 
   return (
-    <section id="examples">
-      <h2>Examples</h2>
+    <Section id="examples" title="Examples">
       <menu>{tabButtons}</menu>
       <TabContent topic={selectedTopic}></TabContent>
-    </section>
+    </Section>
   );
 }
