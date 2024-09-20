@@ -1,10 +1,10 @@
 import Tab from "./Tabs.jsx";
 import TabContent from "./TabContent.jsx";
 
-export default function Tabs({ buttons, children }) {
+export default function Tabs({ buttons, children, Tag='menu' }) { //'menu' is the default
   return (
     <>
-      <menu>{buttons}</menu>
+      <Tag>{buttons}</Tag>
       {children}
     </>
   );
