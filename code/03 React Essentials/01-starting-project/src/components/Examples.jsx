@@ -3,6 +3,7 @@ import { useState } from "react";
 import Section from "./Section";
 import TabContent from "./TabContent";
 import TabButton from "./TabButton";
+import Tabs from "./Tabs";
 
 export default function Examples() {
   const [selectedTopic, setSelectedTopic] = useState();
@@ -30,8 +31,9 @@ export default function Examples() {
 
   return (
     <Section id="examples" title="Examples">
-      <menu>{tabButtons}</menu>
-      <TabContent topic={selectedTopic}></TabContent>
+      <Tabs buttons={tabButtons}>
+        <TabContent topic={selectedTopic}></TabContent>
+      </Tabs>
     </Section>
   );
 }
