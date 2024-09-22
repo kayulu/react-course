@@ -1,11 +1,24 @@
-export default function Player({name, symbol}) {
+import { useState } from "react";
+
+export default function Player({ name, symbol }) {
+  const [isEditing, setIsEditing] = useState(false);
+
+  function handleEditClick() {
+    setIsEditing((editing) => !editing); // best practice to prevent 'scheduling' by React
+  }
+
   return (
     <li>
       <span className="player">
-        <span className="player-name">{name}</span>
+        {!isEditing ? (
+          <span className="player-name">{name}</span>
+        ) : (
+          <input type="text" required value={name} />
+        )}
+
         <span className="player-symbol">{symbol}</span>
+        <button onClick={handleEditClick}>{isEditing ? "Save" : "Edit"}</button>
       </span>
-      <button>Edit</button>
     </li>
   );
 }
