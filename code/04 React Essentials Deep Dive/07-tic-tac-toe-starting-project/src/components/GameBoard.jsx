@@ -6,9 +6,8 @@ const initialGameBoard = [
   [null, null, null],
 ];
 
-export default function GameBoard() {
+export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
   const [gameBoard, setGameBoard] = useState(initialGameBoard);
-  const [playerSymbol, setPlayerSymbol] = useState("X");
   const [winner, setWinner] = useState(null);
 
   function handleButtonClick(rowIndex, colIndex) {
@@ -17,32 +16,31 @@ export default function GameBoard() {
     setGameBoard((prevBoard) => {
       const newBoard = [...prevBoard];  // shallow copy of prevBoard, each row hold ref to inner arrays
       newBoard[rowIndex] = [...newBoard[rowIndex]]; // deep copy only of newBoard[rowIndex]
-      newBoard[rowIndex][colIndex] = playerSymbol;
+      newBoard[rowIndex][colIndex] = activePlayerSymbol;
 
       // this is another solution, it creates a deep copy of all the elements 
       // const newBoard = [...prevBoard.map(innerArray => [...innerArray])];
-      
-      newBoard[rowIndex][colIndex] = playerSymbol;
+      // newBoard[rowIndex][colIndex] = activePlayerSymbol;
 
       checkWin(newBoard, rowIndex, colIndex); // check win works on the newly created array
 
       return newBoard;
     })
 
-    playerSymbol === "X" ? setPlayerSymbol("O") : setPlayerSymbol("X");
+    onSelectSquare();
   }
 
   function checkWin(board, rowIndex, colIndex) {
     if (checkRowWin(board, rowIndex) || checkColWin(board, colIndex) || checkDiagonalWin(board)) {
-      setWinner(playerSymbol);
-      console.log("Winner is: " + playerSymbol);
+      setWinner(activePlayerSymbol);
+      console.log("Winner is: " + activePlayerSymbol);
     }
   }
 
   function checkRowWin(board, rowIndex) {
     let count = 0;
     for (const elem of board[rowIndex])
-      elem === playerSymbol ? count++ : null;
+      elem === activePlayerSymbol ? count++ : null;
 
     if (count === 3) return true;
 
@@ -52,7 +50,7 @@ export default function GameBoard() {
   function checkColWin(board, colIndex) {
     let count = 0;
     board.forEach((row) => {
-      if (row[colIndex] == playerSymbol) count++;
+      if (row[colIndex] == activePlayerSymbol) count++;
     });
 
     if (count === 3) return true;
@@ -79,10 +77,10 @@ export default function GameBoard() {
       {gameBoard.map((row, rowIndex) => (
         <li key={rowIndex}>
           <ol>
-            {row.map((playerSymbol, colIndex) => (
+            {row.map((activePlayerSymbol, colIndex) => (
               <li key={colIndex}>
                 <button onClick={() => handleButtonClick(rowIndex, colIndex)}>
-                  {playerSymbol}
+                  {activePlayerSymbol}
                 </button>
               </li>
             ))}
