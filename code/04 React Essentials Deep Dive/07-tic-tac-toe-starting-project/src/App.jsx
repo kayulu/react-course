@@ -3,85 +3,85 @@ import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import Log from "./components/Log";
 
+import { WINNING_COMBINATIONS } from "./winning-combinations";
+
+const initialGameBoard = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+
 function deriveActivePlayer(prevTurns) {
-  let currentPlayer = 'X';
-  if(prevTurns.length > 0 && prevTurns[0].player === 'X')
-    currentPlayer = 'O';
+  let currentPlayer = "X";
+  if (prevTurns.length > 0 && prevTurns[0].player === "X") currentPlayer = "O";
 
   return currentPlayer;
 }
 
-  // function checkWin(board, rowIndex, colIndex) {
-  //   if (
-  //     checkRowWin(board, rowIndex) ||
-  //     checkColWin(board, colIndex) ||
-  //     checkDiagonalWin(board)
-  //   ) {
-  //     setWinner(activePlayerSymbol);
-  //     console.log("Winner is: " + activePlayerSymbol);
-  //   }
-  // }
+function checkWin(board) {
+  let winner = null;
 
-  // function checkRowWin(board, rowIndex) {
-  //   let count = 0;
-  //   for (const elem of board[rowIndex])
-  //     elem === activePlayerSymbol ? count++ : null;
+  for(const comb of WINNING_COMBINATIONS) {
+    let [comb1, comb2, comb3] = comb;
+    let comb_1_symbol = board[comb1.row][comb1.col];
+    let comb_2_symbol = board[comb2.row][comb2.col];
+    let comb_3_symbol = board[comb3.row][comb3.col];
 
-  //   if (count === 3) return true;
+    if(comb_1_symbol && comb_1_symbol === comb_2_symbol && comb_2_symbol === comb_3_symbol)
+      winner = comb_1_symbol;
+  }
 
-  //   return false;
-  // }
-
-  // function checkColWin(board, colIndex) {
-  //   let count = 0;
-  //   board.forEach((row) => {
-  //     if (row[colIndex] == activePlayerSymbol) count++;
-  //   });
-
-  //   if (count === 3) return true;
-
-  //   return false;
-  // }
-
-  // function checkDiagonalWin(board) {
-  //   console.log(board);
-  //   if (
-  //     (board[0][0] === board[1][1] &&
-  //       board[1][1] === board[2][2] &&
-  //       board[0][0] !== null) ||
-  //     (board[0][2] === board[1][1] &&
-  //       board[1][1] === board[2][0] &&
-  //       board[0][2] !== null)
-  //   )
-  //     return true;
-  //   return false;
-  // }
+  return winner;
+}
 
 export default function App() {
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
+  let board = initialGameBoard;
+  let winner = checkWin(board);
+
   function handleSelectSquare(rowIndex, colIndex) {
-    setGameTurns(prevTurns => {
+    setGameTurns((prevTurns) => {
       let currentPlayer = deriveActivePlayer(prevTurns);
 
-      const updatedTurns = [{square: {row: rowIndex, col: colIndex}, player: currentPlayer},...prevTurns]
+      const updatedTurns = [
+        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+        ...prevTurns,
+      ];
+
+      // derive gameBoard from state (turns) that is managed in App component
+      for (const turn of updatedTurns) {
+        const { square, player } = turn;
+        const { row, col } = square;
+
+        board[row][col] = player;
+      }
 
       return updatedTurns;
-    })
+    });
   }
 
   return (
     <main>
       <div id="game-container">
         <ul id="players" className="highlight-player">
-          <Player initialName="Player 1" symbol="X" isActive={activePlayer === 'X'} />
-          <Player initialName="Player 2" symbol="O" isActive={activePlayer === 'O'} />
+          <Player
+            initialName="Player 1"
+            symbol="X"
+            isActive={activePlayer === "X"}
+          />
+          <Player
+            initialName="Player 2"
+            symbol="O"
+            isActive={activePlayer === "O"}
+          />
         </ul>
-        <GameBoard onSelectSquare={handleSelectSquare} turns={gameTurns}/>
+        {winner && <p>Winner is: {winner}</p>}
+        <GameBoard onSelectSquare={handleSelectSquare} gameBoard={board} />
       </div>
       <Log turns={gameTurns} />
     </main>
-  );  
+  );
 }

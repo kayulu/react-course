@@ -1,21 +1,5 @@
-import { useState } from "react";
+export default function GameBoard({ onSelectSquare, gameBoard }) {
 
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-
-export default function GameBoard({ onSelectSquare, turns }) {
-  let gameBoard = initialGameBoard.map(row => [...row]);
-
-  // derive gameBoard from state (turns) that is managed in App component
-  for (const turn of turns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
 
   return (
     <ol id="game-board">
