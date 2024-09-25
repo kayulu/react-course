@@ -13,7 +13,7 @@ const initialGameBoard = [
 ];
 
 function updateGameboard(gameTurns) {
-  let board = initialGameBoard;
+  let board = initialGameBoard.map(row => [...row]);
 
   // derive gameBoard from state (turns) that is managed in App component
   for (const turn of gameTurns) {
@@ -76,6 +76,10 @@ export default function App() {
     });
   }
 
+  function handleRestart() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -91,7 +95,7 @@ export default function App() {
             isActive={activePlayer === "O"}
           />
         </ul>
-        {(winner || hasDraw) && <GameOver winner={winner} />}
+        {(winner || hasDraw) && <GameOver winner={winner} onRestart={handleRestart} />}
         <GameBoard onSelectSquare={handleSelectSquare} gameBoard={board} />
       </div>
       <Log turns={gameTurns} />
