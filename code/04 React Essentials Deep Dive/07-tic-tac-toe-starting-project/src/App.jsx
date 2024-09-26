@@ -6,14 +6,19 @@ import GameOver from "./components/GameOver";
 
 import { WINNING_COMBINATIONS } from "./winning-combinations";
 
-const initialGameBoard = [
+const PLAYERS = {
+  X: 'Player 1',
+  O: 'Player 2'
+};
+
+const INITIAL_GAMEBOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
 function updateGameboard(gameTurns) {
-  let board = initialGameBoard.map(row => [...row]);
+  let board = INITIAL_GAMEBOARD.map(row => [...row]);
 
   // derive gameBoard from state (turns) that is managed in App component
   for (const turn of gameTurns) {
@@ -54,7 +59,7 @@ function checkWin(board) {
 }
 
 export default function App() {
-  const [players, setPlayers] = useState({X: 'Player 1', O: 'Player 2'});
+  const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = deriveActivePlayer(gameTurns);
@@ -95,13 +100,13 @@ export default function App() {
       <div id="game-container">
         <ul id="players" className="highlight-player">
           <Player
-            initialName="Player 1"
+            initialName={PLAYERS.X}
             symbol="X"
             isActive={activePlayer === "X"}
             onNameChange={handlePlayerNameChange}
           />
           <Player
-            initialName="Player 2"
+            initialName={PLAYERS.O}
             symbol="O"
             isActive={activePlayer === "O"}
             onNameChange={handlePlayerNameChange}
