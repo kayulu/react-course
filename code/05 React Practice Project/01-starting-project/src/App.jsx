@@ -1,7 +1,7 @@
 import UserInput from "./components/UserInput.jsx";
 import Result from "./components/Result.jsx";
 import { useState } from "react";
-import { calculateInvestmentResults } from "./util/investment";
+
 
 let INVESTMENT_PARAMETERS = {
   initialInvestment: 10000,
@@ -15,17 +15,24 @@ export default function App() {
     INVESTMENT_PARAMETERS
   );
 
-  const handleInputChange = (newValues) => {
-    setInvestmentParams((previousParams) => ({
-      ...previousParams, // keep the previous values
-      ...newValues, // only update the new values
-    }));
-  };
+  let inputIsValid = investmentParams.duration >= 1;
+
+  function handleChange(event) {
+    let {id, value} = event.target;
+
+    setInvestmentParams( (previousParams) => {
+      return {
+        ...previousParams,
+        [id]: +value  // + operator to convert a string to a number
+      }
+    });
+  }
 
   return (
     <main>
-      <UserInput onInputChange={handleInputChange} params={investmentParams} />
-      <Result currentResults={calculateInvestmentResults(investmentParams)} />
+      <UserInput onInputChange={handleChange} params={investmentParams} />
+      {!inputIsValid && <p className="center">Please enter valid data.</p>}
+      {inputIsValid && <Result params={investmentParams} />}
     </main>
   );
 }

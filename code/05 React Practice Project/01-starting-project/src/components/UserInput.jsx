@@ -1,24 +1,4 @@
-export default function UserInput({ onInputChange, params }) {
-  let investmentParams = params;
-
-  function handleChange(event) {
-    let id = event.target.id;
-    let newValues = null;
-
-    if (id === "expectedReturn") {
-      newValues = {
-        ...params,
-        [id]: parseFloat(event.target.value),
-      };
-    } else {
-      newValues = {
-        ...params,
-        [id]: parseInt(event.target.value),
-      };
-    }
-
-    onInputChange(newValues);
-  }
+export default function UserInput({ onInputChange, params}) {
 
   return (
     <section id="user-input">
@@ -29,8 +9,9 @@ export default function UserInput({ onInputChange, params }) {
             className="user-input"
             id="initialInvestment"
             type="number"
-            value={investmentParams.initialInvestment}
-            onChange={(event) => handleChange(event)}
+            step={500}
+            value={params.initialInvestment}
+            onChange={(event) => onInputChange(event)}
             required
           />
         </p>
@@ -40,8 +21,9 @@ export default function UserInput({ onInputChange, params }) {
             className="user-input"
             id="annualInvestment"
             type="number"
-            value={investmentParams.annualInvestment}
-            onChange={(event) => handleChange(event)}
+            step={100}
+            value={params.annualInvestment}
+            onChange={(event) => onInputChange(event)}
             required
           />
         </p>
@@ -53,8 +35,9 @@ export default function UserInput({ onInputChange, params }) {
             className="user-input"
             id="expectedReturn"
             type="number"
-            value={investmentParams.expectedReturn}
-            onChange={(event) => handleChange(event)}
+            step={0.1}
+            value={params.expectedReturn}
+            onChange={(event) => onInputChange(event)}
             required
           />
         </p>
@@ -64,8 +47,8 @@ export default function UserInput({ onInputChange, params }) {
             className="user-input"
             id="duration"
             type="number"
-            value={investmentParams.duration}
-            onChange={(event) => handleChange(event)}
+            value={params.duration}
+            onChange={(event) => onInputChange(event)}
             required
           />
         </p>
