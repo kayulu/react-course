@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
+import CustomInput from "./CustomInput";
 
 const ControlsContainer = styled.div`
   display: flex;
@@ -8,27 +9,6 @@ const ControlsContainer = styled.div`
   gap: 0.5rem;
   margin-bottom: 1.5rem;
   background-color: ${(props) => (props.primary ? "blue" : "")};
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: ${({ $invalid }) => ($invalid ? "#f87171" : "#6b7280")};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  line-height: 1.5;
-  background-color: ${({ $invalid }) => ($invalid ? "#fed2d2" : "#d1d5db")};
-  color: ${({ $invalid }) => ($invalid ? "#ef4444" : "#374151")};
-  border: 1px solid ${({ $invalid }) => ($invalid ? "#f73f3f" : "transparent")};
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 `;
 
 export default function AuthInputs() {
@@ -54,28 +34,20 @@ export default function AuthInputs() {
   return (
     <div id="auth-inputs">
       <ControlsContainer>
-        <p>
-          {/* $-symbol is just a convention in styled components. 
-           It's added to avoid clashes with build in attribute names.
-           '$invalid' is still a valid HTML attribute-name.
-           */}
-          <Label $invalid={emailNotValid}>Email</Label>
-          <Input
-            $invalid={emailNotValid}
-            type="email"
-            onChange={(event) => handleInputChange("email", event.target.value)}
-          />
-        </p>
-        <p>
-          <Label $invalid={passwordNotValid}>Password</Label>
-          <Input
-            $invalid={passwordNotValid}
-            type="password"
-            onChange={(event) =>
-              handleInputChange("password", event.target.value)
-            }
-          />
-        </p>
+        <CustomInput
+          label="Email"
+          invalid={emailNotValid}
+          type="email"
+          onChange={(event) => handleInputChange("email", event.target.value)}
+        />
+        <CustomInput
+          label="Password"
+          invalid={passwordNotValid}
+          type="password"
+          onChange={(event) =>
+            handleInputChange("password", event.target.value)
+          }
+        />
       </ControlsContainer>
       <div className="actions">
         <button type="button" className="text-button">
