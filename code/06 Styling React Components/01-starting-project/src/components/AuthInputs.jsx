@@ -1,15 +1,6 @@
 import { useState } from "react";
-import styled from "styled-components";
 import Button from "./Button";
-import CustomInput from "./CustomInput"
-
-const ControlsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  background-color: ${(props) => (props.primary ? "blue" : "")};
-`;
+import CustomInput from "./CustomInput";
 
 export default function AuthInputs() {
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -32,8 +23,8 @@ export default function AuthInputs() {
   const passwordNotValid = submitted && enteredPassword.trim().length < 6;
 
   return (
-    <div id="auth-inputs">
-      <ControlsContainer>
+    <div className="w-full max-w-sm p-8 mx-auto rounded shadow-md bg-gradient-to-b from-stone-100 to-stone-200">
+      <div className="flex flex-col gap-2 mb-6">
         <CustomInput
           label="Email"
           invalid={emailNotValid}
@@ -48,9 +39,12 @@ export default function AuthInputs() {
             handleInputChange("password", event.target.value)
           }
         />
-      </ControlsContainer>
-      <div className="actions">
-        <button type="button" className="text-button">
+      </div>
+      <div className="flex justify-end">
+        <button
+          type="button"
+          className="text-buttonpx-4 py-1 px-1 mr-1 text-sm font-semibold rounded-md border border-stone-300 text-stone-400 hover:text-stone-500"
+        >
           Create a new account
         </button>
         <Button onClick={handleLogin}>Sign In</Button>
