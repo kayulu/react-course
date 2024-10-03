@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Button from "./Button";
-import CustomInput from "./CustomInput";
+import CustomInput from "./CustomInput"
 
 const ControlsContainer = styled.div`
   display: flex;
