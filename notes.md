@@ -1,0 +1,105 @@
+# Notes on React
+
+## React Component Lifecycle
+### 1. **Writing JSX** (Component Definition)
+
+In React, components are written as **JSX** (JavaScript XML), which looks like HTML but gets converted into JavaScript objects by React. For example:
+
+```jsx
+function MyComponent() {
+  return <h1>Hello, World!</h1>;
+}
+```
+
+- This JSX gets **transpiled** by tools like Babel into plain JavaScript using `React.createElement`.
+  
+  ```jsx
+  // JSX equivalent in pure JS
+  React.createElement('h1', null, 'Hello, World!');
+  ```
+
+### 2. **Virtual DOM** (React's In-Memory Representation)
+
+Once JSX is converted into JavaScript objects, React uses this data to create a **virtual DOM**. The virtual DOM is a lightweight representation of what the actual DOM should look like after rendering.
+
+- Virtual DOM nodes (or "elements") are just plain JavaScript objects that describe the structure of the UI (e.g., the type of the element, its props, and children).
+
+### 3. **Rendering to the Real DOM**
+
+The actual lifecycle and journey to the real DOM begin when a component is mounted or updated. Here's the lifecycle in detail:
+
+---
+
+### **Initial Render (Mounting Phase)**
+
+When a React component is first rendered to the DOM, this process happens:
+
+#### 1. **Constructor/Initialization (if class component)**:
+- For class components, the constructor is called first to initialize state and props.
+  
+#### 2. **Render Method (or Functional Component Execution)**:
+- React **calls the `render()` function** (or directly runs the body of a functional component).
+- This method returns the JSX (which React has converted into virtual DOM elements).
+
+#### 3. **Reconciliation**:
+- React **compares** the virtual DOM with the current state of the real DOM (since this is the first render, the real DOM is either empty or has placeholders).
+- It determines which parts of the virtual DOM need to be rendered into the real DOM.
+
+#### 4. **Real DOM Update**:
+- React **commits the changes** to the real DOM by creating actual DOM elements (e.g., `<h1>Hello, World!</h1>`) and placing them in the browser's DOM.
+  
+#### 5. **useEffect / componentDidMount**:
+- After the initial render, React executes any side effects like `useEffect` (in functional components) or `componentDidMount` (in class components).
+- These hooks run *after* the component is rendered into the real DOM, giving access to the final DOM nodes.
+
+---
+
+### **Updating Phase (Re-renders)**
+
+When state or props change, React updates the component:
+
+#### 1. **State/Props Change**:
+- When the state changes (using `useState`, `setState`, etc.), React re-triggers the render process.
+
+#### 2. **Render (Again)**:
+- React runs the component's render function again to produce a new virtual DOM tree based on the updated state/props.
+
+#### 3. **Reconciliation (Diffing Algorithm)**:
+- React compares the new virtual DOM with the previous virtual DOM (this is called **reconciliation**).
+- React uses a **diffing algorithm** to figure out the minimal number of changes needed to update the real DOM (e.g., only changing the text inside an `<h1>`).
+
+#### 4. **Update Real DOM**:
+- Based on the diff, React updates only the necessary parts of the real DOM.
+  
+#### 5. **useEffect Cleanup & useEffect (or componentDidUpdate)**:
+- After updating the real DOM, React executes `useEffect` or `componentDidUpdate`, running any side effects based on the latest state/props.
+- `useEffect` can also clean up any resources if necessary, especially when dependencies have changed.
+
+---
+
+### **Unmounting Phase**
+
+When a component is no longer needed and is removed from the DOM:
+
+#### 1. **useEffect Cleanup (or componentWillUnmount)**:
+- Before the component is removed from the DOM, React runs the **cleanup phase** for any side effects (e.g., removing event listeners, aborting network requests).
+  
+#### 2. **Remove from the Real DOM**:
+- React removes the component's DOM elements from the real DOM.
+
+---
+
+### **Summary of the Journey:**
+
+1. **JSX** → Transpiled to `React.createElement`.
+2. **Virtual DOM** → React creates an in-memory representation of the UI.
+3. **Initial Rendering**:
+   - React mounts components by rendering the virtual DOM into the **real DOM**.
+4. **Updates/Re-renders**:
+   - When state or props change, React **diffs** the virtual DOM and efficiently updates only the necessary parts of the real DOM.
+5. **Side Effects**:
+   - `useEffect` or lifecycle methods manage any side effects like DOM manipulation, data fetching, etc.
+6. **Unmounting**:
+   - React cleans up before removing a component from the DOM.
+
+This cycle repeats every time state or props change, ensuring efficient updates to the real DOM based on changes in your app's data.
