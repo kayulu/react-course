@@ -168,12 +168,12 @@ function MyComponent() {
   const inputRef = useRef(null); // Step 1: Create ref
 
   useEffect(() => {
-    // Step 4: Access DOM element after mounting
+    // Step 3: Access DOM element after mounting
     inputRef.current.focus(); // Focus on input element when the component mounts
   }, []); // Empty dependency array so it runs only after initial render
 
   return (
-    <input ref={inputRef} type="text" placeholder="Focus me on load" /> // Step 3: Assign ref
+    <input ref={inputRef} type="text" placeholder="Focus me on load" /> // Step 2: Assign ref
   );
 }
 
