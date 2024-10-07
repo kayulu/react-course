@@ -5,12 +5,14 @@ export default function TimerChallenge({ title, targetTime }) {
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerExpired, setTimerExpired] = useState(false);
 
-  let timer = useRef(); // value stored by React but change of value does not trigger a re-render
+  const timer = useRef(); // value stored by React but change of value does not trigger a re-render
+  const dialog = useRef();
 
   function handleStart() {
     timer.current = setTimeout(() => {
       // timer.current now stores the timer that is defined here
       setTimerExpired(true);
+      dialog.current.showModal(); // make dialog inside ResultModal visible
     }, targetTime * 1000);
 
     setTimerStarted(true);
@@ -22,7 +24,7 @@ export default function TimerChallenge({ title, targetTime }) {
 
   return (
     <>
-      {timerExpired && <ResultModal targetTime={targetTime} result="lost" />}
+      <ResultModal ref={dialog} targetTime={targetTime} result="lost" />
       <section className="challenge">
         <h2>{title}</h2>
         <p className="challenge-time">
