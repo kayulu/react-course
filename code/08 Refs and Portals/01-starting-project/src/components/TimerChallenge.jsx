@@ -9,9 +9,9 @@ export default function TimerChallenge({ title, targetTime }) {
   const dialog = useRef();
 
   function handleStart() {
-    timer.current = setTimeout(() => {
+    timer.current = setTimeout(() => { // returns a timerID
       // timer.current now stores the timer that is defined here
-      setTimerExpired(true);
+      setTimerExpired(true); // <- will run after timer times out
       dialog.current.showModal(); // make dialog inside ResultModal visible
     }, targetTime * 1000);
 

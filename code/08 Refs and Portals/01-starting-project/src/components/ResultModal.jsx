@@ -1,6 +1,9 @@
 import { forwardRef } from "react";
 
- const ResultModal = forwardRef(function ResultModal({result, targetTime}, ref) {
+// 'forwardRef' is a utility function that wraps a functional component. 
+// It allows receives a 'ref' to be passed from the parent that will 
+// then be forwarded to an internal element.
+ const ResultModal = forwardRef(({result, targetTime}, ref) => {
     return (
         <dialog ref={ref} className="result-modal">
             <h2>You {result}</h2>

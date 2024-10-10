@@ -185,3 +185,54 @@ export default MyComponent;
 - **`useRef()`** creates a mutable ref object with a `.current` property, which gets updated after the DOM is mounted.
 - **Refs are synchronous in assignment** but should be accessed in effects like `useEffect()` to ensure the DOM is updated.
 - They allow direct manipulation of the DOM but should be used sparingly to maintain React’s declarative style.
+
+
+### 9. `forwardRef` in React
+
+**What is `forwardRef`?**
+- `forwardRef` is a utility function in React that allows you to pass a `ref` from a parent component to a child component. It enables the parent component to directly reference a DOM element or another component within the child.
+
+**How it is used?**
+- It wraps a functional component so that it can receive a `ref` and forward it to an internal element.
+  
+Example:
+
+```jsx
+import React, { forwardRef } from 'react';
+
+const MyInput = forwardRef((props, ref) => {
+  return <input ref={ref} {...props} />;
+});
+
+export default MyInput;
+```
+
+Usage in a parent component:
+
+```jsx
+import React, { useRef } from 'react';
+import MyInput from './MyInput';
+
+function App() {
+  const inputRef = useRef();
+
+  const focusInput = () => {
+    inputRef.current.focus(); // Using the forwarded ref to focus the input
+  };
+
+  return (
+    <div>
+      <MyInput ref={inputRef} />
+      <button onClick={focusInput}>Focus Input</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+**When to use `forwardRef`?**
+- Use `forwardRef` when you need to access a child component's DOM element or component instance from a parent.
+- It's especially useful when building reusable components that need to expose some internal behavior, such as focusing on an input field, scrolling a container, or interacting with a canvas element.
+
+By using `forwardRef`, you can make sure that the `ref` is correctly passed from parent to child, without the need for the parent to "reach inside" the child component manually.
