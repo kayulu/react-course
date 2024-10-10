@@ -236,3 +236,78 @@ export default App;
 - It's especially useful when building reusable components that need to expose some internal behavior, such as focusing on an input field, scrolling a container, or interacting with a canvas element.
 
 By using `forwardRef`, you can make sure that the `ref` is correctly passed from parent to child, without the need for the parent to "reach inside" the child component manually.
+
+### 10. `useImperativeHandle` in React
+
+**What is `useImperativeHandle`?**
+- `useImperativeHandle` is a React hook that allows you to customize the instance value that is exposed when a parent component uses a `ref` on a child component. 
+- It works with `forwardRef` to define what functionality or value is exposed to the parent, instead of directly exposing the child’s DOM node or component instance.
+
+**How it is used?**
+- You wrap this hook inside a `forwardRef` component to give the parent control over a specific set of methods or properties, rather than giving full access to the DOM node or the whole component.
+
+Example:
+
+```jsx
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+
+const MyInput = forwardRef((props, ref) => {
+  const inputRef = useRef();
+
+  // Using useImperativeHandle to expose a custom API to the parent
+  useImperativeHandle(ref, () => ({
+    focus: () => {
+      inputRef.current.focus();
+    },
+    blur: () => {
+      inputRef.current.blur();
+    },
+  }));
+
+  return <input ref={inputRef} {...props} />;
+});
+
+export default MyInput;
+```
+
+Usage in a parent component:
+
+```jsx
+import React, { useRef } from 'react';
+import MyInput from './MyInput';
+
+function App() {
+  const inputRef = useRef();
+
+  const focusInput = () => {
+    inputRef.current.focus(); // Calls the custom focus method defined in useImperativeHandle
+  };
+
+  const blurInput = () => {
+    inputRef.current.blur(); // Calls the custom blur method defined in useImperativeHandle
+  };
+
+  return (
+    <div>
+      <MyInput ref={inputRef} />
+      <button onClick={focusInput}>Focus Input</button>
+      <button onClick={blurInput}>Blur Input</button>
+    </div>
+  );
+}
+
+export default App;
+```
+
+**How it works:**
+1. In the `MyInput` component, we use `forwardRef` to accept a `ref` from the parent component.
+2. Inside `MyInput`, the `useImperativeHandle` hook is used to define custom methods (e.g., `focus`, `blur`) that will be exposed when the parent accesses the ref.
+3. These custom methods interact with the actual `inputRef` (the DOM node) but only expose what we explicitly define.
+4. The parent (`App` component) can now use these custom methods via the `inputRef`.
+
+**When to use `useImperativeHandle`:**
+- Use it when you need to expose a **custom API** to the parent component.
+- It's useful for controlling behavior of DOM elements (e.g., inputs, canvases, videos) from the parent, while keeping the internal implementation (like managing refs or extra logic) encapsulated in the child.
+- It provides a layer of abstraction that helps keep internal details hidden while still giving external control over specific behaviors.
+
+By using `useImperativeHandle`, you can make sure the parent component only has access to a controlled set of actions, improving encapsulation and modularity in your code.
