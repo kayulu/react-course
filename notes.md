@@ -311,3 +311,64 @@ export default App;
 - It provides a layer of abstraction that helps keep internal details hidden while still giving external control over specific behaviors.
 
 By using `useImperativeHandle`, you can make sure the parent component only has access to a controlled set of actions, improving encapsulation and modularity in your code.
+
+## Portals
+In React, **Portals** provide a way to render components outside of their parent component's DOM hierarchy while still preserving the same React tree structure. Essentially, a Portal allows you to render a part of your UI somewhere else in the DOM, separate from the rest of the components, while still maintaining React's event handling and state management.
+
+### Key Use Case
+Portals are especially useful when you need to render elements that should break out of the parent container's layout, such as:
+- Modals or Dialogs
+- Tooltips
+- Popups
+- Overlays
+
+Normally, when you create a component, it gets rendered as a child of its parent DOM node. However, with a Portal, you can render that component into any other DOM node, which might be outside the current React component tree.
+
+### How Portals Work
+React provides a method called `ReactDOM.createPortal` to achieve this. The syntax is as follows:
+
+```jsx
+ReactDOM.createPortal(child, container)
+```
+
+- `child`: The React component or elements you want to render.
+- `container`: The target DOM element where you want to render the child component.
+
+### Example
+
+```jsx
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+function Modal({ children }) {
+  return ReactDOM.createPortal(
+    <div className="modal">
+      {children}
+    </div>,
+    document.getElementById('modal-root')  // Target DOM element outside of the main component tree
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>Hello World!</h1>
+      <Modal>
+        <p>This is a modal dialog</p>
+      </Modal>
+    </div>
+  );
+}
+
+export default App;
+```
+
+In this example:
+1. The `Modal` component is rendered outside of the `<div>` containing "Hello World!" because it's being mounted into the DOM element with an `id` of `modal-root`, which exists outside the main React app.
+2. Despite this, React's event system continues to work normally within the modal as though it was part of the component tree.
+
+### Benefits
+- **DOM Isolation**: Allows components like modals to avoid being restricted by CSS styles or layout constraints in parent containers.
+- **Event Bubbling**: Despite rendering in different parts of the DOM, events continue to propagate as expected in the React hierarchy.
+
+Portals make it easier to handle certain UI patterns where you want more control over the DOM placement of a component.

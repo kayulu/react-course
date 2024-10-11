@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 // 'forwardRef' is a utility function that wraps a functional component. 
 // It receives a 'ref' to be passed from the parent that will 
@@ -16,7 +17,7 @@ import { forwardRef, useImperativeHandle, useRef, useState } from "react";
         open: () => dialogRef.current.showModal()
     }));
 
-    return (
+    return createPortal(
         <dialog ref={dialogRef} className="result-modal" onClose={reset}>
             {userLost && <h2>You lose!</h2>}
             {!userLost && <h2>Your score: {score}</h2>}
@@ -25,7 +26,8 @@ import { forwardRef, useImperativeHandle, useRef, useState } from "react";
             <form method="dialog" onSubmit={reset}>
                 <button>Close</button>
             </form>
-        </dialog>
+        </dialog>,
+        document.getElementById('modal')
     );
 });
 
