@@ -9,6 +9,8 @@ function App() {
     projects: [],
   });
 
+  // called in 'NoProjectSelected'
+  // Sets 'selectedProjectId' to null so that 'NewProject' component will be selected (see below)
   function handleCreateNewProject() {
     setProjectsState((prevProjectState) => {
       return {
@@ -18,17 +20,33 @@ function App() {
     });
   }
 
+  // called in 'NewProject'
+  // adds the project to the array.
+  function handleAddProject(project) {
+    setProjectsState(prevProjectsState => {
+      const newProject = {
+        ...project,
+        id: Math.random()
+      }
+      return {
+        ...prevProjectsState,
+        selectedProjectId: undefined,
+        projects: [...prevProjectsState.projects, newProject]
+      }
+    });
+  }
+
   let content;
 
   if (projectsState.selectedProjectId === undefined) {
     content = <NoProjectSelected onCreateNewProject={handleCreateNewProject} />;
   } else if(projectsState.selectedProjectId === null) {
-    content = <NewProject />;
-  }
+    content = <NewProject onSaveNewProject={handleAddProject} />;
+  } 
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onCreateNewProject={handleCreateNewProject} />
+      <ProjectsSidebar onCreateNewProject={handleCreateNewProject} projects={projectsState.projects} />
       {content}
     </main>
   );
