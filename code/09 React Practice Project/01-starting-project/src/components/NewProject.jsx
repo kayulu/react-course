@@ -26,6 +26,7 @@ export default function NewProject({ onSaveNewProject, onCancel }) {
         title: enteredTitle,
         description: enteredDescripton,
         dueDate: enteredDueDate,
+        tasks: [],
       });
     }
   }
@@ -35,13 +36,20 @@ export default function NewProject({ onSaveNewProject, onCancel }) {
       <Modal ref={modalRef} buttonCaption="Close">
         {/*this makes the dialog reusable for other messages*/}
         <h2 className="text-sl font-bold text-stone-700 my-4">Invalid Input</h2>
-        <p className="text-stone-600 mb-4">Oops ... looks like you forgot to enter a value.</p>
-        <p className="text-stone-600 mb-4">Please make sure you provide a valid value for every input field.</p>
+        <p className="text-stone-600 mb-4">
+          Oops ... looks like you forgot to enter a value.
+        </p>
+        <p className="text-stone-600 mb-4">
+          Please make sure you provide a valid value for every input field.
+        </p>
       </Modal>
       <div className="w-[35rem] mt-16">
         <menu className="flex items-center justify-end gap-4 my-4">
           <li>
-            <Button className="text-stone-800 hover:text-stone-950" onClick={onCancel}>
+            <Button
+              className="text-stone-800 hover:text-stone-950"
+              onClick={onCancel}
+            >
               Cancel
             </Button>
           </li>

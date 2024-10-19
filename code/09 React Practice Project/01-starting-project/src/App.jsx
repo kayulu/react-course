@@ -67,6 +67,42 @@ function App() {
     });
   }
 
+  function handleAddTask(newTask) {
+    newTask.id = Math.random();
+
+    setProjectsState((prevProjectsState) => {
+      return {
+        ...prevProjectsState,
+        projects: prevProjectsState.projects.map((project) => {
+          if (project.id === prevProjectsState.selectedProjectId) {
+            return {
+              ...project,
+              tasks: [...project.tasks, newTask],
+            };
+          }
+          return project;
+        }),
+      };
+    });
+  }
+
+  function handleDeleteTask(taskId) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        projects: prevState.projects.map((project) => {
+          if (project.id === prevState.selectedProjectId) {
+            return {
+              ...project,
+              tasks: project.tasks.filter((task) => task.id !== taskId),
+            };
+          }
+          return project;
+        }),
+      };
+    });
+  }
+
   let content;
 
   if (projectsState.selectedProjectId === undefined) {
@@ -83,6 +119,8 @@ function App() {
       <SelectedProject
         projectState={projectsState}
         onDeleteProject={handleDeleteProject}
+        onAddTask={handleAddTask}
+        onDeleteTask={handleDeleteTask}
       />
     );
   }
