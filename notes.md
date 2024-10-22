@@ -372,3 +372,71 @@ In this example:
 - **Event Bubbling**: Despite rendering in different parts of the DOM, events continue to propagate as expected in the React hierarchy.
 
 Portals make it easier to handle certain UI patterns where you want more control over the DOM placement of a component.
+
+## Context API
+
+### 1. **Purpose of Context API**:
+The **Context API** is a tool in React that allows you to share state and data across multiple components without having to manually pass props down through every level of the component tree. It is mainly used to avoid **prop drilling** (passing props down multiple levels), making state management simpler for deeply nested or unrelated components.
+
+### 2. **Key Components of Context API**:
+- **`createContext()`**: This function creates a context object. It returns two components:
+  - **Provider**: This is a wrapper component that holds the state or data you want to share. It provides the context's value to all its descendants.
+  - **Consumer** (or `useContext()` hook): Components can consume the shared data by using either the `useContext()` hook (in functional components) or the `Consumer` component (in class components).
+
+### 3. **Basic Steps to Use Context**:
+   - **Create a Context**:
+     ```jsx
+     const MyContext = React.createContext();
+     ```
+   - **Wrap the Provider** around the components that need access to the context:
+     ```jsx
+     <MyContext.Provider value={/* shared data */}>
+       <ComponentA />
+       <ComponentB />
+     </MyContext.Provider>
+     ```
+   - **Consume the Context** in child components using `useContext`:
+     ```jsx
+     const contextValue = React.useContext(MyContext);
+     ```
+
+### 4. **Example**:
+```jsx
+// 1. Create Context
+const MyContext = React.createContext();
+
+function App() {
+  const value = { user: "John Doe" };
+
+  // 2. Wrap components with the Provider
+  return (
+    <MyContext.Provider value={value}>
+      <ComponentA />
+      <ComponentB /> {/* Both can access context */}
+    </MyContext.Provider>
+  );
+}
+
+function ComponentB() {
+  // 3. Consume context in ComponentB
+  const context = React.useContext(MyContext);
+  return <div>{context.user}</div>; // Output: John Doe
+}
+```
+
+### 5. **Key Considerations**:
+- **Provider and Consumer Relationship**: Any component that wants to access the context must be a **descendant** of the `Provider`. If a component is outside the `Provider`, it cannot access the context.
+  
+- **No Direct Parent-Child Relationship Needed**: Components do **not** have to be directly related (parent-child) to share context. They can be anywhere within the component tree as long as they are descendants of the same `Provider`.
+
+
+### 6. **Usage of `useContext()` Hook**:
+   - Instead of using a `Consumer` component, the `useContext()` hook is a simpler way to access the context in functional components.
+   - Example:
+     ```jsx
+     const context = React.useContext(MyContext);
+     ```
+
+---
+
+By using the **Context API**, you can simplify state management in applications with deeply nested components or multiple components that need access to shared data.
