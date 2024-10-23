@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import CartContext from "../store/CartContext.jsx";
+import { CartContext } from "../store/CartContext.jsx";
 
 export default function Cart() {
   const { items, updateCartItemQuantity } = useContext(CartContext);
@@ -25,19 +25,11 @@ export default function Cart() {
                   <span> ({formattedPrice})</span>
                 </div>
                 <div className="cart-item-actions">
-                  <button
-                    onClick={() =>
-                      updateCartItemQuantity(item.id, -1)
-                    }
-                  >
+                  <button onClick={() => updateCartItemQuantity(item.id, -1)}>
                     -
                   </button>
                   <span>{item.quantity}</span>
-                  <button
-                    onClick={() =>
-                      updateCartItemQuantity(item.id, 1)
-                    }
-                  >
+                  <button onClick={() => updateCartItemQuantity(item.id, 1)}>
                     +
                   </button>
                 </div>
