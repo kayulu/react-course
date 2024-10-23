@@ -429,13 +429,15 @@ function ComponentB() {
   
 - **No Direct Parent-Child Relationship Needed**: Components do **not** have to be directly related (parent-child) to share context. They can be anywhere within the component tree as long as they are descendants of the same `Provider`.
 
+### 6. **React Behaviour with Context and Re-render**
 
-### 6. **Usage of `useContext()` Hook**:
-   - Instead of using a `Consumer` component, the `useContext()` hook is a simpler way to access the context in functional components.
-   - Example:
-     ```jsx
-     const context = React.useContext(MyContext);
-     ```
+Summary of Re-rendering Rules:
+
+1. **Context Consumers Re-render on Value Change**: Any component that **accesses** a context value will re-render if that value changes.
+2. **Selective Re-renders**: Components that access only part of the context will not re-render if the part they depend on hasn’t changed.
+3. **Efficient Updates**: React re-renders only the components that depend on the context value that has changed, keeping updates efficient.
+
+This behavior ensures that React updates only the necessary components when state changes propagate through the context.
 
 ---
 
