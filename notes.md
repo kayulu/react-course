@@ -442,3 +442,127 @@ This behavior ensures that React updates only the necessary components when stat
 ---
 
 By using the **Context API**, you can simplify state management in applications with deeply nested components or multiple components that need access to shared data.
+
+## `useReducer` hook
+The `useReducer` hook in React is a function that provides an alternative way to manage state in functional components, especially for **more complex state logic** or **when state updates depend on previous state values**. It’s similar to `useState`, but while `useState` is ideal for simple states, `useReducer` shines in scenarios where you have multiple, interdependent state updates or complex state transformations.
+
+### What is `useReducer`?
+
+`useReducer` is a React hook that takes in two parameters:
+
+1. A **reducer function** that defines how to update the state based on the provided "action."
+2. An **initial state** that defines the state’s starting value.
+
+`useReducer` returns:
+- The **current state** value.
+- A **dispatch function** that allows you to trigger state changes by passing in an action object.
+
+### Syntax
+
+```javascript
+const [state, dispatch] = useReducer(reducer, initialState);
+```
+
+- **`state`**: Holds the current state value.
+- **`dispatch`**: A function that you call to update the state by sending an action to the reducer function.
+
+### Basic Example
+
+Here’s an example that shows `useReducer` managing a counter with increment and decrement actions.
+
+1. Define the initial state and the reducer function:
+   ```javascript
+   const initialState = { count: 0 };
+
+   function reducer(state, action) {
+       switch (action.type) {
+           case 'increment':
+               return { count: state.count + 1 };
+           case 'decrement':
+               return { count: state.count - 1 };
+           default:
+               return state;
+       }
+   }
+   ```
+
+2. Use `useReducer` in a component:
+   ```javascript
+   import React, { useReducer } from 'react';
+
+   function Counter() {
+       const [state, dispatch] = useReducer(reducer, initialState);
+
+       return (
+           <div>
+               <p>Count: {state.count}</p>
+               <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+               <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+           </div>
+       );
+   }
+   ```
+
+   - Here, `dispatch({ type: 'increment' })` sends an action to the `reducer` to update the state.
+   - The `reducer` function decides how the state should change based on the action's `type`.
+
+### When to Use `useReducer`
+
+Consider using `useReducer` instead of `useState` when:
+- **Complex State Logic**: If your state updates are complex, nested, or involve multiple properties that need to be updated together.
+- **Interdependent State Changes**: When state updates depend on previous state values, and you want to handle this in an organized way.
+- **Multiple Actions on State**: When there are various actions (like "increment," "decrement," "reset") that need to be handled for a single state object.
+- **Readability and Maintainability**: `useReducer` helps with readability, as all state changes are centralized in the reducer function rather than scattered across multiple functions in the component.
+
+### Practical Example with Complex State
+
+Imagine an e-commerce cart where you want to add, remove, or update quantities of items in the cart. This scenario would benefit from `useReducer`:
+
+1. **Define the reducer and initial state**:
+   ```javascript
+   const initialCart = { items: [] };
+
+   function cartReducer(state, action) {
+       switch (action.type) {
+           case 'add':
+               return { ...state, items: [...state.items, action.item] };
+           case 'remove':
+               return { ...state, items: state.items.filter(item => item.id !== action.id) };
+           case 'updateQuantity':
+               return {
+                   ...state,
+                   items: state.items.map(item =>
+                       item.id === action.id ? { ...item, quantity: action.quantity } : item
+                   ),
+               };
+           default:
+               return state;
+       }
+   }
+   ```
+
+2. **Use `useReducer` in a component**:
+   ```javascript
+   function Cart() {
+       const [cart, dispatch] = useReducer(cartReducer, initialCart);
+
+       const addItem = (item) => dispatch({ type: 'add', item });
+       const removeItem = (id) => dispatch({ type: 'remove', id });
+       const updateQuantity = (id, quantity) => dispatch({ type: 'updateQuantity', id, quantity });
+
+       return (
+           <div>
+               {cart.items.map(item => (
+                   <div key={item.id}>
+                       <p>{item.name} - Quantity: {item.quantity}</p>
+                       <button onClick={() => removeItem(item.id)}>Remove</button>
+                       <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>Add More</button>
+                   </div>
+               ))}
+               <button onClick={() => addItem({ id: 'new', name: 'New Item', quantity: 1 })}>Add New Item</button>
+           </div>
+       );
+   }
+   ```
+
+In this example, `useReducer` organizes the logic, making it clear and easy to manage actions and state in one place.
