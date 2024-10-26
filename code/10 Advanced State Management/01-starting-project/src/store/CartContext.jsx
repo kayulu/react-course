@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useReducer } from "react";
 import { DUMMY_PRODUCTS } from "../dummy-products";
 
 // create a context managing object
@@ -11,37 +11,26 @@ export const CartContext = createContext(
   }
 );
 
-export default function CartContextProvider({ children }) {
-  const [shoppingCart, setShoppingCart] = useState({
-    items: [],
-  });
-
-  // this is what we want to expose to consumers
-  const cartCtx = {
-    items: shoppingCart.items,
-    addItemToCart: handleAddItemToCart,
-    updateCartItemQuantity: handleUpdateCartItemQuantity,
-  };
-
-  function handleAddItemToCart(id) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
-
+// state is the 'latest' state snapshot that is managed by 'useReducer' hook
+function reducer(state, action) {
+  const updatedItems = [...state.items];
+  switch (action.type) {
+    case "ADD_ITEM":
       const existingCartItemIndex = updatedItems.findIndex(
-        (cartItem) => cartItem.id === id
+        (cartItem) => cartItem.id === action.payload.id
       );
       const existingCartItem = updatedItems[existingCartItemIndex];
 
       if (existingCartItem) {
-        const updatedItem = {
+        const updatedItem = { 
           ...existingCartItem,
           quantity: existingCartItem.quantity + 1,
         };
         updatedItems[existingCartItemIndex] = updatedItem;
       } else {
-        const product = DUMMY_PRODUCTS.find((product) => product.id === id);
+        const product = DUMMY_PRODUCTS.find((product) => product.id === action.payload.id);
         updatedItems.push({
-          id: id,
+          id: product.id,
           name: product.title,
           price: product.price,
           quantity: 1,
@@ -49,23 +38,19 @@ export default function CartContextProvider({ children }) {
       }
 
       return {
+        ...state,
         items: updatedItems,
       };
-    });
-  }
-
-  function handleUpdateCartItemQuantity(productId, amount) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
+    case "UPDATE_ITEM":
       const updatedItemIndex = updatedItems.findIndex(
-        (item) => item.id === productId
+        (item) => item.id === action.payload.id
       );
 
       const updatedItem = {
         ...updatedItems[updatedItemIndex],
       };
 
-      updatedItem.quantity += amount;
+      updatedItem.quantity += action.payload.amount;
 
       if (updatedItem.quantity <= 0) {
         updatedItems.splice(updatedItemIndex, 1);
@@ -76,8 +61,18 @@ export default function CartContextProvider({ children }) {
       return {
         items: updatedItems,
       };
-    });
   }
+}
+
+export default function CartContextProvider({ children }) {
+  const [shoppingCartState, dispatch] = useReducer(reducer, {items: []});
+
+  // this is what we want to expose to consumers
+  const cartCtx = {
+    items: shoppingCartState.items,
+    addItemToCart: (id) => dispatch({type: "ADD_ITEM", payload: {id: id}}),
+    updateCartItemQuantity: (id, amount) => dispatch({type: "UPDATE_ITEM", payload: {id, amount}}), // shorthand syntax
+  };
 
   return (
     <CartContext.Provider value={cartCtx}>{children}</CartContext.Provider>
