@@ -566,3 +566,57 @@ Imagine an e-commerce cart where you want to add, remove, or update quantities o
    ```
 
 In this example, `useReducer` organizes the logic, making it clear and easy to manage actions and state in one place.
+
+## The `useEffect` Hook
+
+The `useEffect` hook is React's way of managing side effects in functional components. It allows you to run side-effect code in a controlled way after the component renders or when certain values change.
+
+Here’s how it works:
+
+1. **Basic Syntax**:
+   ```javascript
+   useEffect(() => {
+     // Code to run after render or state change
+     return () => {
+       // Optional cleanup code here
+     };
+   }, [dependencies]);
+   ```
+   - The first argument is a **callback function** that contains the side effect code.
+   - The optional `return` inside the callback provides **cleanup logic** (for example, to clear a timer or unsubscribe).
+   - The second argument, an **array of dependencies**, specifies when the effect should re-run.
+
+2. **When to Use `useEffect`**:
+   - **On Mounting (component creation)**: To run an effect only once when a component is first added to the DOM, use an empty dependency array (`[]`), so it doesn’t re-run.
+   - **On Updating (state/props changes)**: When you need to re-run the effect based on changes to specific values, list those dependencies in the array (e.g., `[count]`).
+   - **On Unmounting (component removal)**: To handle cleanup when a component is removed, use the `return` function for cleanup logic.
+
+### Example of `useEffect`
+
+Here’s an example of `useEffect` to fetch data when the component first mounts:
+
+```javascript
+import React, { useEffect, useState } from "react";
+
+function DataFetcher() {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch("https://api.example.com/data");
+      const result = await response.json();
+      setData(result);
+    }
+    fetchData();
+  }, []); // Empty dependency array, so this runs only on mount
+
+  return <div>{data ? JSON.stringify(data) : "Loading..."}</div>;
+}
+```
+
+In this example:
+- **Data is fetched** only once, when the component mounts.
+- **The empty array** as the second argument prevents repeated fetching on each render.
+- **Updating the `data` state** here is a side effect, but it’s managed within `useEffect` so React can control when it occurs. 
+
+`useEffect` is crucial for managing asynchronous actions, subscriptions, and other side effects in a controlled and predictable way in functional components.
