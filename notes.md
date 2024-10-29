@@ -567,9 +567,13 @@ Imagine an e-commerce cart where you want to add, remove, or update quantities o
 
 In this example, `useReducer` organizes the logic, making it clear and easy to manage actions and state in one place.
 
-## The `useEffect` Hook
+## Side Effects
+Side Effects refer to any operations that affect something outside the component rendering process. Examples include fetching data from an API, directly updating the DOM, setting up subscriptions or timers, and interacting with localStorage or the browser's history. These operations are "side effects" because they occur as secondary actions to the main purpose of rendering the UI—they modify the application or environment outside of rendering and can produce results that persist beyond the component’s scope.
 
-The `useEffect` hook is React's way of managing side effects in functional components. It allows you to run side-effect code in a controlled way after the component renders or when certain values change.
+
+### The `useEffect` Hook
+
+React's `useEffect` hook is specifically designed to handle these side effects by letting you run code at specific points in a component’s lifecycle, such as when the component mounts, updates, or unmounts. Using `useEffect` helps keep your component logic clear and declarative by isolating side effects from the main rendering flow.
 
 Here’s how it works:
 
@@ -591,7 +595,7 @@ Here’s how it works:
    - **On Updating (state/props changes)**: When you need to re-run the effect based on changes to specific values, list those dependencies in the array (e.g., `[count]`).
    - **On Unmounting (component removal)**: To handle cleanup when a component is removed, use the `return` function for cleanup logic.
 
-### Example of `useEffect`
+#### Example of `useEffect`
 
 Here’s an example of `useEffect` to fetch data when the component first mounts:
 
