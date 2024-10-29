@@ -568,7 +568,7 @@ Imagine an e-commerce cart where you want to add, remove, or update quantities o
 In this example, `useReducer` organizes the logic, making it clear and easy to manage actions and state in one place.
 
 ## Side Effects
-Side Effects refer to any operations that affect something outside the component rendering process. Examples include fetching data from an API, directly updating the DOM, setting up subscriptions or timers, and interacting with localStorage or the browser's history. These operations are "side effects" because they occur as secondary actions to the main purpose of rendering the UI—they modify the application or environment outside of rendering and can produce results that persist beyond the component’s scope.
+Side Effects refer to any operations that affect something outside the component rendering process. Examples include fetching data from an API, directly updating the DOM, setting up subscriptions or timers, and interacting with localStorage or the browser's history. These operations are "side effects" because they occur as secondary actions to the main purpose of rendering the UI — they modify the application or environment outside of rendering and can produce results that persist beyond the component’s scope.
 
 
 ### The `useEffect` Hook
