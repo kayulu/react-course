@@ -624,3 +624,24 @@ In this example:
 - **Updating the `data` state** here is a side effect, but it’s managed within `useEffect` so React can control when it occurs. 
 
 `useEffect` is crucial for managing asynchronous actions, subscriptions, and other side effects in a controlled and predictable way in functional components.
+
+### Dependencies
+Dependencies refer to the variables or state values that, when changed, trigger the effect to re-run. Dependencies are specified in an array passed as the second argument to `useEffect` (e.g., `[dependency1, dependency2]`). Each time React renders the component, it compares the current values of these dependencies to their previous values; if any have changed, the effect function will execute again. Dependencies help control when side effects occur, making them efficient and predictable. If no dependencies are provided, the effect runs on every render, and if an empty array (`[]`) is provided, it runs only once on mount and cleanup on unmount.
+
+### The `useCallback` Hook
+
+When passing functions as dependencies to `useEffect`, there are a few important considerations to ensure predictable and optimal behavior:
+
+1. **Function Identity**: Functions in JavaScript are recreated on every render, so when a function is passed as a dependency, `useEffect` may re-run every time the component renders. This can lead to unwanted effect executions. To prevent this, you can wrap the function in `useCallback`, which memoizes the function, keeping it the same across renders unless its dependencies change.
+
+   ```javascript
+   const myFunction = useCallback(() => {
+     // some logic
+   }, [dependency1, dependency2]);
+   ```
+
+2. **Dependency Array Updates**: If the function uses values from the component’s state or props, those values must be included as dependencies in `useEffect`. This ensures the function has up-to-date information and prevents `useEffect` from running with stale values.
+
+3. **Memoized Dependencies**: For complex dependencies, it’s also possible to create derived values or functions outside the effect, using `useMemo` or `useCallback`, to keep dependencies stable and avoid unnecessary re-renders.
+
+In summary, when passing functions as dependencies, it’s crucial to stabilize them using `useCallback` and to list any variables the function relies on in the dependency array to avoid unintended behavior and ensure correct data flow in `useEffect`.
