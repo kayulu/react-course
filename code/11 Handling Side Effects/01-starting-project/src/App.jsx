@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 import Places from "./components/Places.jsx";
 import { AVAILABLE_PLACES } from "./data.js";
@@ -56,7 +56,9 @@ function App() {
     }
   }
 
-  function handleRemovePlace() {
+  // useCallback memoizes the function, meaning it 
+  // preserves the function reference across re-renders, provided that its dependencies haven’t changed.
+  const handleRemovePlace = useCallback(function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
@@ -66,7 +68,7 @@ function App() {
     localStorage.setItem("pickedPlaces", JSON.stringify(updatedIds));
 
     setIsModalOpen(false);
-  }
+  }, []);
 
   return (
     <>
