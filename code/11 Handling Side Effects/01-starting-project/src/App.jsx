@@ -14,10 +14,11 @@ const storedPlaces =
     : [];
 
 function App() {
-  const modal = useRef();
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
   const [availablePlaces, setAvailablePlaces] = useState([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // this will be called after this component has returned
   useEffect(() => {
@@ -32,12 +33,12 @@ function App() {
   }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setIsModalOpen(true);
     selectedPlace.current = id; // useRef() to store a value without re-render
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setIsModalOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -64,12 +65,12 @@ function App() {
     const updatedIds = storedIds.filter((id) => id !== selectedPlace.current);
     localStorage.setItem("pickedPlaces", JSON.stringify(updatedIds));
 
-    modal.current.close();
+    setIsModalOpen(false);
   }
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={isModalOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
