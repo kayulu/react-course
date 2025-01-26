@@ -293,7 +293,7 @@ The `useState` hook is a fundamental React hook used to manage state in function
        setState(state + 1); // Both updates are batched, but state will only increment by 1 because state is not updated synchronously.
      };
      ```
-     To use the most recent state, rely on the functional form:
+     To use the most recent state, rely on the functional form **(keyword: Stale Closures)**:
      ```jsx
      setState(prevState => prevState + 1);
      setState(prevState => prevState + 1); // State will increment by 2.
