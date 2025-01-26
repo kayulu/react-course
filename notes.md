@@ -330,10 +330,19 @@ The `useState` hook is a fundamental React hook used to manage state in function
      ```
 
 5. **Batching State Updates**:
-   - React batches state updates within the same event loop for performance optimization. However, updates across asynchronous operations (like `setTimeout`) may not be batched in older React versions. This behavior is improved in React 18+.
+    - React batches state updates within the same event loop for performance optimization. However, updates across asynchronous operations (like `setTimeout`) may not be batched in older React versions. This behavior is improved in React 18+.
 
 6. **State and Props Separation**:
-   - State is local to the component and should not be confused with props, which are passed down from parent components.
+    - State is local to the component and should not be confused with props, which are passed down from parent components.
+  
+7. **Stale Closures with setState**:
+    - Be very careful when directly using a state value inside a state update callback (using the non functional version) without using the functional update. It can cause unexpected issues due to closures.
+
+8. **Functional Updates**:
+    - Use the functional form of the state setter (setState(prevState => ...) or setCount(prevCount => ...)) when your new state value depends on the previous state value.
+
+9. **Batching**:
+    - Batching combines multiple state updates into a single re-render within the same event handler, but it doesn't solve the stale closure problem. It only affects when the re-render is triggered and not the count variable of the callback, which is a closure.
 
 ---
 
