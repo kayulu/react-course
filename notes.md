@@ -868,6 +868,15 @@ By separating the state update logic (reducer) from the mechanism to trigger tho
 ## Side Effects
 Side Effects refer to any operations that affect something outside the component rendering process. Examples include fetching data from an API, directly updating the DOM, setting up subscriptions or timers, and interacting with localStorage or the browser's history. These operations are "side effects" because they occur as secondary actions to the main purpose of rendering the UI — they modify the application or environment outside of rendering and can produce results that persist beyond the component’s scope.
 
+Things to have in mind:
+  - **Side Effects Don't Directly Update the UI**: The useEffect hook, by itself, does not update the UI. It's just a way to run some side effect code (like fetching data, setting up timers, or anything that interacts with something outside of the pure component).
+
+  - **State Updates Indirectly Update the UI**: It is through the setData call within the useEffect that the state data changes, which leads to re-rendering. The useEffect is not the mechanism that changes the UI. It simply provides the data that causes a state change and therefore a new render.
+
+  - **The Importance of State**: Without the setState or set call (or prop change), the UI would remain unchanged. It would remain in the "Loading..." state. This is because React does not automatically look for or react to changes in variables declared inside of the component. It only reacts to changes to its state and/or its props.
+
+  - Side effects in useEffect is usually used to obtain data for the component and that data then is used to updated its state.
+
 
 ## The `useEffect` Hook
 
